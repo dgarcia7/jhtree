@@ -5,13 +5,20 @@ import com.dg.jht.pojo.AbstractNode;
 import com.dg.jht.pojo.SymbolNode;
 import com.dg.jht.pojo.WeightNode;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
+
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
 import com.dg.jht.util.HuffNodeComparator;
+import com.dg.jht.util.MessageRepository;
 
 public class HuffmanTreeBuilder
 {
+	private final Logger logger = Logger.getLogger(HuffmanTreeBuilder.class);
+	private final MessageRepository messageRepository = new MessageRepository();
+	
 	public HuffmanTree build(String input)
     {
         Map<String,Long> frequencyMap = (new FrequencyAnalyzer(input)).generateFrequencyMap();
@@ -37,40 +44,13 @@ public class HuffmanTreeBuilder
         while(nodes.size() > 1)
         {
             Collections.sort(nodes, new HuffNodeComparator());
-            //System.out.println(buildMessage(nodes));
+            logger.trace(messageRepository.buildNodesMessage(nodes));
             AbstractNode firstNode = nodes.remove(0);
             AbstractNode secondNode = nodes.remove(0);
             AbstractNode combinedNode = new WeightNode(firstNode,secondNode);
             nodes.add(combinedNode);
         }
-        //System.out.println(buildMessage(nodes));
+        logger.trace(messageRepository.buildNodesMessage(nodes));
         return nodes.get(0);
-    }
-    
-    private String buildMessage(List<AbstractNode> nodes)
-    {
-    	StringBuilder sb = new StringBuilder();
-    	
-    	for(AbstractNode node : nodes)
-    	{
-    		if(node instanceof WeightNode)
-    		{
-    			WeightNode weightNode = (WeightNode)node;
-    			sb.append("(");
-    			sb.append(weightNode.getWeight());
-    			sb.append(") ");
-    		}
-    		else if(node instanceof SymbolNode)
-    		{
-    			SymbolNode symbolNode = (SymbolNode)node;
-    			sb.append("[");
-    			sb.append(symbolNode.getSymbol());
-    			sb.append("|");
-    			sb.append(symbolNode.getWeight());
-    			sb.append("] ");
-    		}
-    	}
-    	
-    	return sb.toString();
     }
 }

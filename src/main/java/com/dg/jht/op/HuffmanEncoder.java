@@ -5,17 +5,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.dg.jht.exc.HuffmanEncodingException;
 import com.dg.jht.pojo.AbstractNode;
 import com.dg.jht.pojo.SymbolNode;
 import com.dg.jht.pojo.WeightNode;
-import com.dg.jht.util.HuffmanTreeLogger;
+import com.dg.jht.util.MessageRepository;
 
 public class HuffmanEncoder
 {
 	private AbstractNode huffmanTreeRoot = null;
 	private Map<String,List<Boolean>> mapSymbolToBits = null;
-	private HuffmanTreeLogger htLogger = new HuffmanTreeLogger();
+	private final Logger logger = Logger.getLogger(HuffmanEncoder.class);
+	private MessageRepository messageRepository = new MessageRepository();
 	
 	public HuffmanEncoder(AbstractNode rootInput)
 	{
@@ -28,7 +31,7 @@ public class HuffmanEncoder
 		Map<String,List<Boolean>> map = new HashMap<String,List<Boolean>>();
 		List<Boolean> emptyBitSet = new LinkedList<Boolean>();
 		buildMapRecursive(root,emptyBitSet,map,1);
-		htLogger.log(root);
+		logger.debug(messageRepository.buildTreeMessage(root));
 		return map;
 	}
 	

@@ -9,41 +9,30 @@ import com.dg.jht.pojo.AbstractNode;
 import com.dg.jht.pojo.SymbolNode;
 import com.dg.jht.pojo.WeightNode;
 
-public class HuffmanTreeLogger
+public class MessageRepository
 {
-	public void log(AbstractNode root)
+	public String buildTreeMessage(AbstractNode root)
 	{
+		StringBuilder treeStringBuilder = new StringBuilder();
+		treeStringBuilder.append("huffman tree contents:");
 		Map<Integer,List<Pair<AbstractNode,List<Boolean>>>> map = new HashMap<Integer,List<Pair<AbstractNode,List<Boolean>>>>();
 		printTreeHelper(root,map,1,new LinkedList<Boolean>());
 		for(Integer level : map.keySet())
 		{
 			List<Pair<AbstractNode,List<Boolean>>> nodes = map.get(level);
-			StringBuilder sb = new StringBuilder();
-			sb.append("map: level ");
-			sb.append(level);
-			sb.append(" has nodes ");
+			StringBuilder levelStringBuilder = new StringBuilder();
+			levelStringBuilder.append("map: level ");
+			levelStringBuilder.append(level);
+			levelStringBuilder.append(" has nodes ");
 			for(Pair<AbstractNode,List<Boolean>> pair : nodes)
 			{
 				AbstractNode printNode = pair.getFirst();
-				if(printNode instanceof WeightNode)
-				{
-					sb.append("(");
-					sb.append(((WeightNode)printNode).getWeight());
-					sb.append(") ");
-				}
-				else if(printNode instanceof SymbolNode)
-				{
-					sb.append("[");
-					sb.append(((SymbolNode)printNode).getSymbol());
-					sb.append("|");
-					sb.append(((SymbolNode)printNode).getWeight());
-					sb.append("|");
-					sb.append(getBitsAsString(pair.getSecond()));
-					sb.append("] ");
-				}
+				levelStringBuilder.append(buildNodeMessage(printNode,pair.getSecond()));
 			}
-			System.out.println(sb.toString());
+			treeStringBuilder.append("\n\t\t");
+			treeStringBuilder.append(levelStringBuilder.toString());
 		}
+		return treeStringBuilder.toString();
 	}
 	
 	private void printTreeHelper(AbstractNode node, Map<Integer,List<Pair<AbstractNode,List<Boolean>>>> map, int level, List<Boolean> bits)
@@ -94,5 +83,39 @@ public class HuffmanTreeLogger
 	public String getBitAsString(Boolean bit)
 	{
 		return (bit == true ? "1" : "0");
+	}
+	
+	public String buildNodesMessage(List<AbstractNode> nodes)
+    {
+    	StringBuilder sb = new StringBuilder();
+    	
+    	for(AbstractNode node : nodes)
+    	{
+    		sb.append(buildNodeMessage(node,new LinkedList<Boolean>()));
+    	}
+    	
+    	return sb.toString();
+    }
+	
+	private String buildNodeMessage(AbstractNode node, List<Boolean> bits)
+	{
+		StringBuilder sb = new StringBuilder();
+		if(node instanceof WeightNode)
+		{
+			sb.append("(");
+			sb.append(((WeightNode)node).getWeight());
+			sb.append(") ");
+		}
+		else if(node instanceof SymbolNode)
+		{
+			sb.append("[");
+			sb.append(((SymbolNode)node).getSymbol());
+			sb.append("|");
+			sb.append(((SymbolNode)node).getWeight());
+			sb.append("|");
+			sb.append(getBitsAsString(bits));
+			sb.append("] ");
+		}
+		return sb.toString();
 	}
 }
