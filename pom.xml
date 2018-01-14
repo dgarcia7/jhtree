@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.dg.jht</groupId>
+	<artifactId>jhtree</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	
+		<!-- standard stuff -->
+		<log4jversion>1.2.17</log4jversion>
+		<junitversion>4.12</junitversion>
+
+		<!-- build -->
+		<compilersourceversion>1.7</compilersourceversion>
+		<compilertargetversion>1.7</compilertargetversion>
+		<maven-compiler-plugin-version>3.1</maven-compiler-plugin-version>
+		<surefireversion>2.16</surefireversion>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junitversion}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4jversion}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+	<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<configuration>
+				<source>${compilersourceversion}</source>
+				<target>${compilertargetversion}</target>
+			</configuration>
+			<version>${maven-compiler-plugin-version}</version>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<version>${surefireversion}</version>
+			<configuration>
+				<enableAssertions>true</enableAssertions>
+			</configuration>
+		</plugin>
+	</plugins>
+	</build>
+</project>
