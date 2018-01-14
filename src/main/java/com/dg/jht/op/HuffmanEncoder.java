@@ -13,6 +13,10 @@ import com.dg.jht.pojo.SymbolNode;
 import com.dg.jht.pojo.WeightNode;
 import com.dg.jht.util.MessageRepository;
 
+/**
+ * Encode a message {@link String} as a huffman-compressed
+ * {@link List} of {@link boolean}.
+ */
 public class HuffmanEncoder
 {
 	private AbstractNode huffmanTreeRoot = null;
@@ -20,12 +24,24 @@ public class HuffmanEncoder
 	private final Logger logger = Logger.getLogger(HuffmanEncoder.class);
 	private MessageRepository messageRepository = new MessageRepository();
 	
+	/**
+	 * Create a new {@link HuffmanEncoder}.
+	 * 
+	 * @param rootInput
+	 */
 	public HuffmanEncoder(AbstractNode rootInput)
 	{
 		huffmanTreeRoot = rootInput;
 		mapSymbolToBits = buildMap(huffmanTreeRoot);
 	}
 	
+	/**
+	 * Build a {@link Map} from symbol {@link String}s
+	 * to the associated {@link Boolean} {@link List}.
+	 * 
+	 * @param root
+	 * @return
+	 */
 	private Map<String,List<Boolean>> buildMap(AbstractNode root)
 	{
 		Map<String,List<Boolean>> map = new HashMap<String,List<Boolean>>();
@@ -35,6 +51,14 @@ public class HuffmanEncoder
 		return map;
 	}
 	
+	/**
+	 * Recursive method to help build the internal {@link Map}.
+	 * 
+	 * @param node
+	 * @param bitSetSoFar
+	 * @param mapSoFar
+	 * @param level
+	 */
 	private void buildMapRecursive(AbstractNode node, List<Boolean> bitSetSoFar, Map<String,List<Boolean>> mapSoFar, int level)
 	{
 		if(node instanceof WeightNode)
@@ -59,6 +83,13 @@ public class HuffmanEncoder
 		}
 	}
 	
+	/**
+	 * Encode the given {@link String} as a huffman-compressed
+	 * {@link List} of {@link Boolean}s.
+	 * @param input
+	 * @return
+	 * @throws HuffmanEncodingException
+	 */
 	public List<Boolean> encode(String input) throws HuffmanEncodingException
     {
 		List<Boolean> output = new LinkedList<Boolean>();
@@ -68,7 +99,7 @@ public class HuffmanEncoder
     		List<Boolean> symbolEncoded = mapSymbolToBits.get(symbol);
     		if(symbolEncoded == null)
     		{
-    			throw new HuffmanEncodingException("no bitset could be found for symbol [" + symbol + "].");
+    			throw new HuffmanEncodingException(messageRepository.buildEncodingExceptionMessage(symbol));
     		}
     		else
     		{

@@ -9,8 +9,21 @@ import com.dg.jht.pojo.AbstractNode;
 import com.dg.jht.pojo.SymbolNode;
 import com.dg.jht.pojo.WeightNode;
 
+/**
+ * Repository for message {@link String}s used in
+ * the application.
+ */
 public class MessageRepository
 {
+	/**
+	 * Build a message for the given {@link AbstractNode}; it
+	 * is assumed that this node is a root node with a
+	 * number of sub-nodes that will also be traversed
+	 * and added to the message.
+	 * 
+	 * @param root
+	 * @return
+	 */
 	public String buildTreeMessage(AbstractNode root)
 	{
 		StringBuilder treeStringBuilder = new StringBuilder();
@@ -35,6 +48,14 @@ public class MessageRepository
 		return treeStringBuilder.toString();
 	}
 	
+	/**
+	 * Assist with building a tree message.
+	 * 
+	 * @param node
+	 * @param map
+	 * @param level
+	 * @param bits
+	 */
 	private void printTreeHelper(AbstractNode node, Map<Integer,List<Pair<AbstractNode,List<Boolean>>>> map, int level, List<Boolean> bits)
 	{
 		if(node != null)
@@ -57,6 +78,14 @@ public class MessageRepository
 		}
 	}
 	
+	/**
+	 * Update the {@link Map} used when building a tree message.
+	 * 
+	 * @param map
+	 * @param node
+	 * @param level
+	 * @param bits
+	 */
 	private void updateMap(Map<Integer,List<Pair<AbstractNode,List<Boolean>>>> map, AbstractNode node, int level, List<Boolean> bits)
 	{
 		List<Pair<AbstractNode,List<Boolean>>> nodes = map.get(level);
@@ -69,6 +98,13 @@ public class MessageRepository
 		nodes.add(pair);
 	}
 	
+	/**
+	 * Convert the given {@link Boolean} {@link List} into
+	 * a printable string with binary bits.
+	 * 
+	 * @param bits
+	 * @return
+	 */
 	public String getBitsAsString(List<Boolean> bits)
 	{
 		StringBuilder sb = new StringBuilder();
@@ -80,11 +116,23 @@ public class MessageRepository
 		return sb.toString();
 	}
 	
+	/**
+	 * Convert the given {@link Boolean} into a printable binary bit.
+	 * 
+	 * @param bit
+	 * @return
+	 */
 	public String getBitAsString(Boolean bit)
 	{
 		return (bit == true ? "1" : "0");
 	}
 	
+	/**
+	 * Build a message for the given {@link List} of {@link AbstractNode}s.
+	 * 
+	 * @param nodes
+	 * @return
+	 */
 	public String buildNodesMessage(List<AbstractNode> nodes)
     {
     	StringBuilder sb = new StringBuilder();
@@ -97,6 +145,14 @@ public class MessageRepository
     	return sb.toString();
     }
 	
+	/**
+	 * Build a node message, including the bits that it's symbol
+	 * will be converted to, if applicable.
+	 * 
+	 * @param node
+	 * @param bits
+	 * @return
+	 */
 	private String buildNodeMessage(AbstractNode node, List<Boolean> bits)
 	{
 		StringBuilder sb = new StringBuilder();
@@ -117,5 +173,27 @@ public class MessageRepository
 			sb.append("] ");
 		}
 		return sb.toString();
+	}
+	
+	/**
+	 * Build a message for encoding exceptions.
+	 * 
+	 * @param symbol
+	 * @return
+	 */
+	public String buildEncodingExceptionMessage(String symbol)
+	{
+		return "no bitset could be found for symbol [" + symbol + "].";
+	}
+	
+	/**
+	 * Build a message for decoding exceptions.
+	 * 
+	 * @param input
+	 * @return
+	 */
+	public String buildDecodingExceptionMessage(List<Boolean> input)
+	{
+		return "no symbol could be found for bitset [" + input.toString() + "].";
 	}
 }
